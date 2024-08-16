@@ -3,7 +3,9 @@
 
 ## Overview
 
-Prompt Runner is a Visual Studio Code extension that allows users to run prompt files against various Large Language Models (LLMs) directly from the editor. The extension supports multiple providers like OpenAI, Anthropic, VSCode Copilot, and Ollama, allowing users to choose their preferred model and provider.
+Prompt Runner is a Visual Studio Code extension that allows users to run prompt files against various LLMs directly from the editor. It turns VSCode into a powerful prompt IDE. You no longer have to tolerate the tiny chat interface or copy pasting between apps for complex prompts.
+
+![demo](images/demo.gif)
 
 ## Installation 
 
@@ -12,24 +14,10 @@ Install on [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemN
 ## Features
 
 - **Run Prompts**: Run the content of the active editor as a prompt against the selected LLM provider and model.
-- **Multiple Providers**: Support for various providers including OpenAI, Anthropic, VSCode Copilot, and Ollama.
 - **Streaming Output**: View streaming responses from LLMs in real-time within the VSCode output channel.
-- **Comment and Score**: After receiving the output, users can comment on the result and provide a score.
 - **Custom Configuration**: Configure your own providers, models, and default settings.
-
-## Compilation
-
-1. Clone this repository or download the source code.
-2. Install the necessary dependencies using `npm` or `yarn`:
-   ```bash
-   npm install
-   ```
-   or
-   ```bash
-   yarn install
-   ```
-3. Open the project in Visual Studio Code.
-4. Press `F5` to launch the extension in a new VSCode window for testing and development.
+- **Multiple Providers**: Support for various providers including OpenAI, Ollama. I am working on Anthropic and VSCode Copilot as model providers.
+- **Observability**(TODO): Integrate with Langfuse for observability, feedback and prompt management.
 
 ## Usage
 
@@ -56,9 +44,9 @@ The default providers include:
 - **VSCode Copilot**: Supports several versions of the GPT models provided by VSCode.
 - **Ollama**: A locally hosted LLM with support for custom models.
 
-#### Configuration Schema
+#### Provider Configuration Schema
 
-The configuration for providers can be defined in the VSCode settings file. Example:
+The configuration for providers can be defined in the VSCode settings file. Currently supported provider types are `openai` and `ollama`. `anthropic` is coming next. Example config:
 
 ```json
 {
@@ -66,7 +54,7 @@ The configuration for providers can be defined in the VSCode settings file. Exam
         {
             "name": "OpenAI",
             "type": "openai",
-            "base_url": "https://api.openai.com/v1",
+            "base_url": "https://api.openai.com/v1", // So that you can use OpenAI-compatible servers
             "api_key": "<your-api-key>",
             "models": [
                 "gpt-3.5-turbo",
@@ -82,14 +70,28 @@ The configuration for providers can be defined in the VSCode settings file. Exam
 }
 ```
 
-### Development
+### Manual Compilation
+
+1. Clone this repository or download the source code.
+2. Install the necessary dependencies using `npm` or `yarn`:
+   ```bash
+   npm install
+   ```
+   or
+   ```bash
+   yarn install
+   ```
+3. Open the project in Visual Studio Code.
+4. Press `F5` to launch the extension in a new VSCode window for testing and development.
+
+## Development
 
 TODO
 
-### Contribution
+## Contribution
 
 Contributions are welcome! Please fork the repository, make your changes, and submit a pull request.
 
-### License
+## License
 
 This project is licensed under the MIT License.

@@ -2,7 +2,7 @@
   "name": "prompt-runner",
   "displayName": "Prompt Runner",
   "description": "Run LLM prompts directly in VSCode. It turns VSCode into a powerful prompt IDE.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publisher": "JinShang",
   "engines": {
     "vscode": "^1.92.0"
@@ -37,6 +37,10 @@
       {
         "command": "prompt-runner.selectDefaultModel",
         "title": "Prompt Runner: Select Default Model"
+      },
+      {
+        "command": "prompt-runner.selectOutputLocation",
+        "title": "Prompt Runner: Select Output Location"
       }
     ],
     "configuration": {
@@ -141,6 +145,15 @@
           "type": "string",
           "description": "Default model to use",
           "default": "gpt4o-latest"
+        },
+        "prompt-runner.outputLocation": {
+          "type": "string",
+          "enum": [
+            "output channel",
+            "webview panel"
+          ],
+          "description": "Output location for the response",
+          "default": "webview panel"
         }
       }
     }
@@ -173,6 +186,8 @@
     "typescript": "^5.4.5"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.26.1",
+    "marked": "^14.0.0",
     "openai": "^4.55.9"
   }
 }

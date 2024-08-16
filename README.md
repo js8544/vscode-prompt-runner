@@ -3,7 +3,7 @@
 
 ## Overview
 
-Prompt Runner is a Visual Studio Code extension that allows users to run prompts against various Large Language Models (LLMs) directly from the editor. The extension supports multiple providers like OpenAI, Anthropic, VSCode Copilot, and Ollama, allowing users to choose their preferred model and provider.
+Prompt Runner is a Visual Studio Code extension that allows users to run prompt files against various Large Language Models (LLMs) directly from the editor. The extension supports multiple providers like OpenAI, Anthropic, VSCode Copilot, and Ollama, allowing users to choose their preferred model and provider.
 
 ## Installation 
 
@@ -74,22 +74,11 @@ The configuration for providers can be defined in the VSCode settings file. Exam
                 "gpt-4o",
                 "gpt-4o-mini"
             ],
-            "default_model": "gpt-4o"
-        },
-        {
-            "name": "Anthropic",
-            "type": "anthropic",
-            "base_url": "https://api.anthropic.com",
-            "api_key": "<your-api-key>",
-            "models": [
-                "claude-3-sonnet-20240620",
-                "claude-3-opus-20240229",
-                "claude-3-haiku-20240307"
-            ]
+            "default_model": "gpt-4o",
+            "organization_id": "",
+            "project_id": ""
         }
-    ],
-    "prompt-runner.defaultProvider": "OpenAI",
-    "prompt-runner.defaultModel": "gpt-4o"
+    ]
 }
 ```
 

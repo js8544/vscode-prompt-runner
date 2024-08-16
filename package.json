@@ -15,6 +15,13 @@
     "type": "git",
     "url": "https://github.com/js8544/vscode-prompt-runner"
   },
+  "keywords": [
+    "prompt",
+    "ai",
+    "code runner",
+    "prompt engineering"
+  ],
+  "icon": "images/icon.png",
   "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {

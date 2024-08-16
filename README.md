@@ -7,7 +7,7 @@ Prompt Runner is a Visual Studio Code extension that allows users to run prompts
 
 ## Installation 
 
-TODO
+Install on [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=JinShang.prompt-runner)
 
 ## Features
 

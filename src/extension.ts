@@ -4,6 +4,7 @@ import { runPrompt } from './commands/runPrompt';
 import { runPromptWithProvider } from './commands/runPromptWithProvider';
 import { defaultProviders } from './config/defaultProvider';
 import { getProviders } from './utils/providerUtils';
+import { selectOutputLocation } from './commands/selectOutputLocation';
 
 export function activate(context: vscode.ExtensionContext) {
 	const config = vscode.workspace.getConfiguration('prompt-runner');
@@ -18,6 +19,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(selectDefaultModel());
 	context.subscriptions.push(runPrompt());
 	context.subscriptions.push(runPromptWithProvider());
+	context.subscriptions.push(selectOutputLocation());
 }
 
 export function deactivate() { }

@@ -2,7 +2,7 @@ import { OpenAI } from 'openai';
 import { Provider } from '../utils/types';
 
 // We use the OpenAI compatible api from Ollama
-export async function executePromptOllama(provider: Provider, model: string, prompt: string) {
+export async function* executePromptOllama(provider: Provider, model: string, prompt: string): AsyncIterable<string> {
   const client = new OpenAI({
     apiKey: provider.api_key,
     baseURL: provider.base_url || 'http://127.0.0.1:11434/v1',
@@ -17,5 +17,9 @@ export async function executePromptOllama(provider: Provider, model: string, pro
     stream: true,
   });
 
-  return stream;
+  for await (const chunk of stream) {
+    // Extract the content from the chunk
+    const content = chunk.choices[0]?.delta?.content || '';
+    yield content;
+  }
 }

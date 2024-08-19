@@ -1,8 +1,9 @@
 import { OpenAI } from 'openai';
 import { Provider } from '../utils/types';
+import { PromptConfig } from '../utils/types';
 
 // We use the OpenAI compatible api from Ollama
-export async function* executePromptOllama(provider: Provider, model: string, prompt: string): AsyncIterable<string> {
+export async function* executePromptOllama(provider: Provider, model: string, prompt: string, config: PromptConfig): AsyncIterable<string> {
   const client = new OpenAI({
     apiKey: provider.api_key,
     baseURL: provider.base_url || 'http://127.0.0.1:11434/v1',
@@ -14,6 +15,9 @@ export async function* executePromptOllama(provider: Provider, model: string, pr
       { role: 'system', content: 'You are a helpful assistant.' },
       { role: 'user', content: prompt },
     ],
+    max_tokens: config.max_tokens,
+    temperature: config.temperature,
+    top_p: config.top_p,
     stream: true,
   });
 

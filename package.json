@@ -175,19 +175,26 @@
   "devDependencies": {
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.92.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
     "@typescript-eslint/parser": "^7.11.0",
     "@vscode/test-cli": "^0.0.9",
-    "@vscode/test-electron": "^2.4.0",
+    "@vscode/test-electron": "^2.4.1",
+    "chai": "^5.1.1",
     "esbuild": "^0.21.5",
     "eslint": "^8.57.0",
+    "mocha": "^10.7.3",
     "npm-run-all": "^4.1.5",
-    "typescript": "^5.4.5"
+    "sinon": "^18.0.0",
+    "typescript": "^5.4.5",
+    "vscode-test": "^1.6.1"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.26.1",
+    "handlebars": "^4.7.8",
     "marked": "^14.0.0",
-    "openai": "^4.55.9"
+    "openai": "^4.55.9",
+    "yaml": "^2.5.0"
   }
 }

@@ -5,6 +5,7 @@ import { executePromptOllama } from '../providers/ollama';
 // import { executePromptAnthropic } from '../providers/anthropic';
 import { executePromptCopilot } from '../providers/copilot';
 import { displayInOutputChannel, displayInWebviewPanel } from './outputHandlers';
+import { compilePrompt } from '../prompt-file/promptFile';
 
 export async function executePromptWithProviderAndModel(providers: Provider[], providerName: string, model: string) {
   const editor = vscode.window.activeTextEditor;
@@ -14,11 +15,28 @@ export async function executePromptWithProviderAndModel(providers: Provider[], p
   }
 
   const document = editor.document;
+
   const prompt = document.getText();
+
+  const { promptConfig, compiledPrompt } = await compilePrompt(prompt);
+
+  if (!compiledPrompt) {
+    vscode.window.showErrorMessage("Failed to compile prompt.");
+    return;
+  }
+
+  providerName = promptConfig.provider || providerName;
+  model = promptConfig.model || model;
 
   const provider = providers.find(p => p.name === providerName);
   if (!provider) {
     vscode.window.showErrorMessage(`Provider ${providerName} not found.`);
+    return;
+  }
+
+  // verify that the model is supported by the provider
+  if (!provider.models.includes(model)) {
+    vscode.window.showErrorMessage(`Model ${model} not supported by provider ${providerName}.`);
     return;
   }
 
@@ -29,10 +47,10 @@ export async function executePromptWithProviderAndModel(providers: Provider[], p
     var stream;
     switch (provider.type) {
       case 'openai':
-        stream = await executePromptOpenAI(provider, model, prompt);
+        stream = await executePromptOpenAI(provider, model, compiledPrompt, promptConfig);
         break;
       case 'ollama':
-        stream = await executePromptOllama(provider, model, prompt);
+        stream = await executePromptOllama(provider, model, compiledPrompt, promptConfig);
         break;
       // case 'anthropic':
       //   stream = await executePromptAnthropic(provider, model, prompt);

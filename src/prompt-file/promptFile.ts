@@ -1,7 +1,29 @@
 import Handlebars from "handlebars";
 import * as vscode from 'vscode';
 import * as yaml from 'yaml';
+import * as fs from 'fs';
+import * as path from 'path';
 import { PromptConfig } from '../utils/types';
+
+// Helpers
+/**
+ * Registering the include helper to read and insert the content of a file.
+ */
+Handlebars.registerHelper('include', function (filePath: string) {
+  const activeEditor = vscode.window.activeTextEditor;
+  if (activeEditor) {
+    const activeDocument = activeEditor.document;
+    const activeDocumentPath = activeDocument.uri.fsPath;
+    filePath = path.resolve(path.dirname(activeDocumentPath), filePath);
+  }
+  const fullPath = path.resolve(filePath);
+  if (fs.existsSync(fullPath)) {
+    return fs.readFileSync(fullPath, 'utf8');
+  } else {
+    throw new Error(`File not found: ${fullPath}`);
+  }
+});
+
 /**
  * Getting the variables from the Handlebars template.
  * Supports helpers too.
@@ -18,14 +40,18 @@ const getHandlebarsVariables = (input: string): string[] => {
       const paramsExpressionList = moustacheStatement.params as hbs.AST.PathExpression[];
       const pathExpression = moustacheStatement.path as hbs.AST.PathExpression;
 
-      return paramsExpressionList[0]?.original || pathExpression.original;
-    });
+      if (paramsExpressionList.length > 0) {
+        return paramsExpressionList.filter((param) => param.type === 'PathExpression').map((param) => param.original);
+      } else {
+        return [pathExpression.original];
+      }
+    }).flat();
 
   // console.log("handlebars vars: ", variables);
   return variables;
 };
 
-export async function compilePrompt(content: string): Promise<{ promptConfig: PromptConfig, compiledPrompt: string }> {
+export async function compilePrompt(content: string, document?: vscode.TextDocument): Promise<{ promptConfig: PromptConfig, compiledPrompt: string }> {
   // Step 1: Split the content by "---" and parse the YAML config if present
   // ignore the starting "---\n"
   content = content.trim();

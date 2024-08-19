@@ -22,7 +22,8 @@ suite('PromptFile Tests', () => {
   });
 
   test('should correctly parse YAML and compile Handlebars template', async () => {
-    const content = `---
+    const content = `
+---
 model: gpt-4o
 temperature: 0.7
 max_tokens: 256
@@ -83,5 +84,18 @@ Context: {{context}}
       },
       new Error('No input provided for variable: context')
     );
+  });
+
+  test('can include file in prompt', async () => {
+    const content = `
+Context: {{include "test-data/context.txt"}}
+
+{{sentence}}
+    `;
+
+    const result = await compilePrompt(content);
+
+    // Check the compiled prompt
+    assert.strictEqual(result.compiledPrompt, 'Context: You are a software engineering expert. You are extremely good at software engineering principles and practices. Now you will write unit tests for this project.\n\n\ntest sentence');
   });
 });

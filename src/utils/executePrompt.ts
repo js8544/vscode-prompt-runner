@@ -18,7 +18,7 @@ export async function executePromptWithProviderAndModel(providers: Provider[], p
 
   const prompt = document.getText();
 
-  const { promptConfig, compiledPrompt } = await compilePrompt(prompt);
+  const { promptConfig, compiledPrompt } = await compilePrompt(prompt, document);
 
   if (!compiledPrompt) {
     vscode.window.showErrorMessage("Failed to compile prompt.");

@@ -1,35 +1,20 @@
 import Handlebars from "handlebars";
 import * as vscode from 'vscode';
 import * as yaml from 'yaml';
-import * as fs from 'fs';
-import * as path from 'path';
 import { PromptConfig } from '../utils/types';
+import { helpers } from './helpers/helper';
+import asyncHelpers from "handlebars-async-helpers-ts";
 
-// Helpers
-/**
- * Registering the include helper to read and insert the content of a file.
- */
-Handlebars.registerHelper('include', function (filePath: string) {
-  const activeEditor = vscode.window.activeTextEditor;
-  if (activeEditor) {
-    const activeDocument = activeEditor.document;
-    const activeDocumentPath = activeDocument.uri.fsPath;
-    filePath = path.resolve(path.dirname(activeDocumentPath), filePath);
-  }
-  const fullPath = path.resolve(filePath);
-  if (fs.existsSync(fullPath)) {
-    return fs.readFileSync(fullPath, 'utf8');
-  } else {
-    throw new Error(`File not found: ${fullPath}`);
-  }
-});
+
+const hb: typeof Handlebars = asyncHelpers(Handlebars);
+hb.registerHelper(helpers);
 
 /**
  * Getting the variables from the Handlebars template.
  * Supports helpers too.
  * @param input
  */
-const getHandlebarsVariables = (input: string): string[] => {
+function getHandlebarsVariables(input: string): string[] {
   const ast: hbs.AST.Program = Handlebars.parseWithoutProcessing(input);
 
   const variables = ast.body.filter(({ type }: hbs.AST.Statement) => (
@@ -85,8 +70,8 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
   }
 
   // Step 3: Compile the template using Handlebars
-  const template = Handlebars.compile(templateContent);
-  const compiledPrompt = template(inputValues);
+  const template = hb.compile(templateContent, { noEscape: true });
+  const compiledPrompt = await template(inputValues);
 
   // console.log("compiledPrompt: ", compiledPrompt);
   // console.log("promptConfig: ", promptConfig);

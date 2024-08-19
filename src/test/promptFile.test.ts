@@ -98,4 +98,14 @@ Context: {{include "test-data/context.txt"}}
     // Check the compiled prompt
     assert.strictEqual(result.compiledPrompt, 'Context: You are a software engineering expert. You are extremely good at software engineering principles and practices. Now you will write unit tests for this project.\n\n\ntest sentence');
   });
+
+  test('should not escape HTML special characters',
+    async () => {
+      const content = `\`\`\`\n\/\\`;
+
+      const result = await compilePrompt(content);
+
+      assert.strictEqual(result.compiledPrompt, '\`\`\`\n\/\\');
+    }
+  );
 });

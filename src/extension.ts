@@ -1,10 +1,11 @@
 import * as vscode from 'vscode';
 import { selectDefaultModel } from './commands/selectDefaultModel';
-import { runPrompt } from './commands/runPrompt';
-import { runPromptWithProvider } from './commands/runPromptWithProvider';
+import { runPromptFile } from './commands/runPromptFile';
+import { runPromptFileWithModel } from './commands/runPromptFileWithModel';
 import { defaultProviders } from './config/defaultProvider';
 import { getProviders } from './utils/providerUtils';
 import { selectOutputLocation } from './commands/selectOutputLocation';
+import { compilePromptFile } from './commands/compilePromptFile';
 
 export function activate(context: vscode.ExtensionContext) {
 	const config = vscode.workspace.getConfiguration('prompt-runner');
@@ -17,9 +18,10 @@ export function activate(context: vscode.ExtensionContext) {
 	}
 
 	context.subscriptions.push(selectDefaultModel());
-	context.subscriptions.push(runPrompt());
-	context.subscriptions.push(runPromptWithProvider());
+	context.subscriptions.push(runPromptFile());
+	context.subscriptions.push(runPromptFileWithModel());
 	context.subscriptions.push(selectOutputLocation());
+	context.subscriptions.push(compilePromptFile());
 }
 
 export function deactivate() { }

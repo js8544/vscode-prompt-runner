@@ -1,9 +1,9 @@
 import * as vscode from 'vscode';
 import { getProviders } from '../utils/providerUtils';
-import { executePromptWithProviderAndModel } from '../utils/executePrompt';
+import { executeFileWithProviderAndModel } from '../utils/executeFile';
 
-export function runPromptWithProvider() {
-  return vscode.commands.registerCommand('prompt-runner.runPromptWithProvider', async () => {
+export function runPromptFileWithModel() {
+  return vscode.commands.registerCommand('prompt-runner.runPromptFileWithModel', async () => {
     const config = vscode.workspace.getConfiguration('prompt-runner');
     const providers = getProviders(config);
     const providerNames = providers.map(provider => provider.name);
@@ -32,6 +32,6 @@ export function runPromptWithProvider() {
       return;
     }
 
-    await executePromptWithProviderAndModel(providers, selectedProviderName, selectedModel);
+    await executeFileWithProviderAndModel(providers, selectedProviderName, selectedModel);
   });
 }

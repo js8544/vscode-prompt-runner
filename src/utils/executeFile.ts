@@ -3,22 +3,13 @@ import { Provider } from './types';
 import { executePromptOpenAI } from '../providers/openai';
 import { executePromptOllama } from '../providers/ollama';
 // import { executePromptAnthropic } from '../providers/anthropic';
-import { executePromptCopilot } from '../providers/copilot';
+// import { executePromptCopilot } from '../providers/copilot';
 import { displayInOutputChannel, displayInWebviewPanel } from './outputHandlers';
-import { compilePrompt } from '../prompt-file/promptFile';
+import { compileFile } from './compileFile';
 
-export async function executePromptWithProviderAndModel(providers: Provider[], providerName: string, model: string) {
-  const editor = vscode.window.activeTextEditor;
-  if (!editor) {
-    vscode.window.showErrorMessage("No active editor found.");
-    return;
-  }
+export async function executeFileWithProviderAndModel(providers: Provider[], providerName: string, model: string) {
 
-  const document = editor.document;
-
-  const prompt = document.getText();
-
-  const { promptConfig, compiledPrompt } = await compilePrompt(prompt, document);
+  const { promptConfig, compiledPrompt } = await compileFile();
 
   if (!compiledPrompt) {
     vscode.window.showErrorMessage("Failed to compile prompt.");

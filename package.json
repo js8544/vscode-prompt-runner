@@ -27,11 +27,15 @@
   "contributes": {
     "commands": [
       {
-        "command": "prompt-runner.runPrompt",
+        "command": "prompt-runner.compilePromptFile",
+        "title": "Prompt Runner: Compile Prompt File"
+      },
+      {
+        "command": "prompt-runner.runPromptFile",
         "title": "Prompt Runner: Run Prompt File"
       },
       {
-        "command": "prompt-runner.runPromptWithProvider",
+        "command": "prompt-runner.runPromptFileWithModel",
         "title": "Prompt Runner: Run Prompt File with……"
       },
       {

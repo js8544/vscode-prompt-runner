@@ -1,6 +1,7 @@
 import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
+import * as os from 'os';
 
 /*
   * Include a file in the prompt file.
@@ -9,15 +10,25 @@ import * as path from 'path';
   * @returns The content of the included file.
 */
 export function include(filePath: string) {
+  // replace ./ with the directory of the current file.
+
+  var baseDir = process.cwd();
   const activeEditor = vscode.window.activeTextEditor;
   if (activeEditor) {
     const activeDocument = activeEditor.document;
     const activeDocumentPath = activeDocument.uri.fsPath;
-    filePath = path.resolve(path.dirname(activeDocumentPath), filePath);
+    baseDir = path.dirname(activeDocumentPath);
   }
-  const fullPath = path.resolve(filePath);
+
+  var fullPath = filePath;
+  if (fullPath.startsWith('~')) {
+    fullPath = fullPath.replace('~', os.homedir());
+  }
+
+  fullPath = path.resolve(baseDir, fullPath);
   if (fs.existsSync(fullPath)) {
-    return fs.readFileSync(fullPath, 'utf8');
+    const content = fs.readFileSync(fullPath, 'utf8');
+    return content;
   } else {
     throw new Error(`File not found: ${fullPath}`);
   }

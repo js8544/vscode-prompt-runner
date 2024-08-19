@@ -1,7 +1,7 @@
 import Handlebars from "handlebars";
 import * as vscode from 'vscode';
 import * as yaml from 'yaml';
-import { PromptConfig } from '../utils/types';
+import { PromptConfig, Provider } from '../utils/types';
 import { helpers } from './helpers/helper';
 import asyncHelpers from "handlebars-async-helpers-ts";
 
@@ -30,11 +30,29 @@ function getHandlebarsVariables(input: string): string[] {
       } else {
         return [pathExpression.original];
       }
-    }).flat();
+    }).flat().reduce((acc: string[], curr: string) => {
+      if (acc.includes(curr)) {
+        return acc;
+      }
+      return [...acc, curr];
+    }, []);
 
   // console.log("handlebars vars: ", variables);
   return variables;
 };
+
+function verifyConfig(promptConfig: PromptConfig): void {
+  const config = vscode.workspace.getConfiguration('prompt-runner');
+  // check that provider and model is supported
+  const providers = config.get('providers') as Provider[];
+  const provider = providers.find(p => p.name === promptConfig.provider);
+  if (!provider) {
+    throw new Error(`Provider ${promptConfig.provider} not found.`);
+  }
+  if (promptConfig.model && !provider.models.includes(promptConfig.model)) {
+    throw new Error(`Model ${promptConfig.model} not supported by provider ${provider.name}.`);
+  }
+}
 
 export async function compilePrompt(content: string, document?: vscode.TextDocument): Promise<{ promptConfig: PromptConfig, compiledPrompt: string }> {
   // Step 1: Split the content by "---" and parse the YAML config if present
@@ -55,6 +73,8 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
   } else {
     templateContent = parts[0].trim();
   }
+
+  verifyConfig(promptConfig);
 
   // Step 2: Extract variables needed and show input boxes for user input
   const variables = getHandlebarsVariables(templateContent);

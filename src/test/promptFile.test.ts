@@ -182,4 +182,20 @@ Context: {{include "test-data/context.txt"}}
     assert.equal((result.messages[0].content[0] as Content).image_url?.url, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
     );
   });
+
+  test("can parse with html tags", async () => {
+    const content = `
+<assistant>
+You are a helpful assistant
+</assistant>
+<user>
+<h1>Test</h1>
+<p>Test</p>
+</user>
+    `;
+
+    const result = await compilePrompt(content);
+
+    assert.equal(result.messages[1].content, '<h1>Test</h1>\n<p>Test</p>');
+  });
 });

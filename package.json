@@ -201,6 +201,8 @@
     "handlebars-async-helpers-ts": "^2.0.1",
     "marked": "^14.0.0",
     "openai": "^4.55.9",
+    "winston": "^3.14.2",
+    "winston-transport": "^4.7.1",
     "yaml": "^2.5.0"
   }
 }

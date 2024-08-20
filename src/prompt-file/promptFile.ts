@@ -5,6 +5,7 @@ import { Message, PromptConfig, Provider } from '../utils/types';
 import { helpers } from './helpers/helper';
 import asyncHelpers from "handlebars-async-helpers-ts";
 import { extractMessages } from "./extractMessages";
+import logger from "../utils/logger";
 
 
 const hb: typeof Handlebars = asyncHelpers(Handlebars);
@@ -38,7 +39,7 @@ function getHandlebarsVariables(input: string): string[] {
       return [...acc, curr];
     }, []);
 
-  // console.log("handlebars vars: ", variables);
+  logger.info(`Variables found in the template: ${variables}`);
   return variables;
 };
 
@@ -64,9 +65,9 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
   if (content.startsWith("---\n")) {
     content = content.slice(4);
   }
-  // console.log("content: ", content);
+
   const parts = content.split('\n---\n');
-  // console.log("parts: ", parts);
+
   let promptConfig: PromptConfig = {};
   let templateContent: string;
 
@@ -77,12 +78,14 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
     templateContent = parts[0].trim();
   }
 
+  logger.info(`Prompt config: ${JSON.stringify(promptConfig)}`);
+
   verifyConfig(promptConfig);
 
   // Step 2: Extract variables needed and show input boxes for user input
   const variables = getHandlebarsVariables(templateContent);
   const inputValues: { [key: string]: string } = {};
-
+  logger.info(`Input values: ${JSON.stringify(inputValues)}`);
   for (const variable of variables) {
     const userInput = await vscode.window.showInputBox({ prompt: `Enter value for ${variable}` });
     if (userInput !== undefined) {
@@ -96,7 +99,7 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
   const template = hb.compile(templateContent, { noEscape: true });
   const compiledPrompt = await template(inputValues);
 
-  console.log("compiledPrompt: ", compiledPrompt);
+  logger.info(`Compiled prompt: ${compiledPrompt}`);
 
   // Step 4: Extract messages from the compiled prompt
   const messages = extractMessages(compiledPrompt);

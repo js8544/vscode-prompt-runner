@@ -16,8 +16,8 @@ export function displayInOutputChannel(stream: AsyncIterable<string>) {
 
 export function displayInWebviewPanel(stream: AsyncIterable<string>) {
   const panel = vscode.window.createWebviewPanel(
-    'promptRunnerOutput',
-    'Prompt Runner Output',
+    'promptCompilerOutput',
+    'Prompt Compiler Output',
     vscode.ViewColumn.Beside,
     { enableScripts: true }
   );
@@ -53,6 +53,10 @@ function getWebviewContent(markdown: string): string {
             .markdown-body h1 {
                 font-size: 2em;
                 margin: 0.67em 0;
+            }
+            .markdown-body h2 {
+                font-size: 1.5em;
+                margin: 0.83em 0;
             }
             /* Add more styles here as needed */
         </style>

@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import logger from '../../../utils/logger';
 
 export function image(url: string) {
   // if image is a web url, use the url directly
@@ -9,7 +10,7 @@ export function image(url: string) {
   var result = url;
   if (!url.startsWith('http')) {
     // replace ./ with the directory of the current file.
-
+    logger.info("Encoding local image " + url);
     var baseDir = process.cwd();
     const activeEditor = vscode.window.activeTextEditor;
     if (activeEditor) {

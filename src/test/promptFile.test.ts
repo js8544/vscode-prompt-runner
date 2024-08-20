@@ -4,6 +4,7 @@ import { compilePrompt } from '../prompt-file/promptFile';
 import * as sinon from 'sinon';
 import * as vscode from 'vscode';
 import { beforeEach, afterEach, test } from 'mocha';
+import { Content } from '../utils/types';
 
 suite('PromptFile Tests', () => {
 
@@ -62,7 +63,7 @@ Context: {{context}}
     assert.strictEqual(result.promptConfig.provider, 'openai');
 
     // Check the compiled prompt
-    assert.strictEqual(result.compiledPrompt, 'Autocomplete the sentence.\n\nContext: test context\n\ntest sentence');
+    assert.strictEqual(result.messages[0].content, 'Autocomplete the sentence.\n\nContext: test context\n\ntest sentence');
   });
 
   test('should reject an unsupported provider or model', async () => {
@@ -125,7 +126,7 @@ Context: {{context}}
     assert.deepStrictEqual(result.promptConfig, {});
 
     // Check the compiled prompt
-    assert.strictEqual(result.compiledPrompt, 'Autocomplete the sentence.\n\nContext: test context\n\ntest sentence');
+    assert.strictEqual(result.messages[0].content, 'Autocomplete the sentence.\n\nContext: test context\n\ntest sentence');
   });
 
   test('should throw an error if user cancels input', async () => {
@@ -158,7 +159,7 @@ Context: {{include "test-data/context.txt"}}
     const result = await compilePrompt(content);
 
     // Check the compiled prompt
-    assert.strictEqual(result.compiledPrompt, 'Context: You are a software engineering expert. You are extremely good at software engineering principles and practices. Now you will write unit tests for this project.\n\n\ntest sentence');
+    assert.strictEqual(result.messages[0].content, 'Context: You are a software engineering expert. You are extremely good at software engineering principles and practices. Now you will write unit tests for this project.\n\n\ntest sentence');
   });
 
   test('should not escape HTML special characters',
@@ -167,7 +168,18 @@ Context: {{include "test-data/context.txt"}}
 
       const result = await compilePrompt(content);
 
-      assert.strictEqual(result.compiledPrompt, '\`\`\`\n\/\\');
+      assert.strictEqual(result.messages[0].content, '\`\`\`\n\/\\');
     }
   );
+
+  test("can encode image in prompt", async () => {
+    const content = `
+    {{image "test-data/1x1.png"}}
+    `;
+
+    const result = await compilePrompt(content);
+
+    assert.equal((result.messages[0].content[0] as Content).image_url?.url, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
+    );
+  });
 });

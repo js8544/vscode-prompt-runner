@@ -9,10 +9,13 @@ export interface Provider {
   default_model?: string;
 }
 
+export interface ImageContent {
+  url: string
+}
 export interface Content {
   type: "text" | "image_url";
   text?: string;
-  url?: string;
+  image_url?: ImageContent;
 }
 export interface Message {
   role: "system" | "user" | "assistant";

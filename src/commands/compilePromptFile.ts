@@ -14,9 +14,9 @@ export function compilePromptFile() {
 
     const prompt = document.getText();
 
-    const { compiledPrompt } = await compilePrompt(prompt, document);
+    const { promptConfig, messages, inputValues } = await compilePrompt(prompt, document);
 
-    if (!compiledPrompt) {
+    if (!messages || messages.length === 0) {
       vscode.window.showErrorMessage("Failed to compile prompt.");
       return;
     }
@@ -24,7 +24,9 @@ export function compilePromptFile() {
     // Make a stream for promptConfig and compiledPrompt
     const stream: AsyncIterable<string> = {
       [Symbol.asyncIterator]: async function* () {
-        yield compiledPrompt;
+        for (const message of messages) {
+          yield JSON.stringify(message, null, 2);
+        }
       }
     };
 

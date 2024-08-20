@@ -1,8 +1,8 @@
 import * as vscode from 'vscode';
 import { compilePrompt } from '../prompt-file/promptFile';
-import { PromptConfig } from './types';
+import { Message, PromptConfig } from './types';
 
-export async function compileFile(): Promise<{ promptConfig: PromptConfig, compiledPrompt: string }> {
+export async function compileFile(): Promise<{ promptConfig: PromptConfig, messages: Message[], inputValues: any }> {
   const config = vscode.workspace.getConfiguration('prompt-runner');
   const editor = vscode.window.activeTextEditor;
   if (!editor) {
@@ -14,12 +14,12 @@ export async function compileFile(): Promise<{ promptConfig: PromptConfig, compi
 
   const prompt = document.getText();
 
-  const { promptConfig, compiledPrompt } = await compilePrompt(prompt, document);
+  const { promptConfig, messages, inputValues } = await compilePrompt(prompt, document);
 
-  if (!compiledPrompt) {
+  if (!messages || messages.length === 0) {
     vscode.window.showErrorMessage("Failed to compile prompt.");
     throw new Error("Failed to compile prompt.");
   }
 
-  return { promptConfig, compiledPrompt };
+  return { promptConfig, messages, inputValues };
 }

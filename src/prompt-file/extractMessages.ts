@@ -28,62 +28,64 @@ class Tokenizer {
   }
 
   nextToken(): Token {
-    this.skipWhitespace(); // Skip any whitespace before looking for the next token
-
-    if (this.pos >= this.input.length) {
-      return { type: 'EOF', value: '' };
-    }
-
-    const remainder = this.input.slice(this.pos);
-
-    if (/^<(system|user|assistant)>/.test(remainder)) {
-      const match = remainder.match(/^<(\w+)>/);
-      if (match) {
-        this.pos += match[0].length;
-        return { type: 'RoleTagOpen', value: match[1] };
+    const textBuffer: string[] = [];
+    while (true) {
+      if (this.pos >= this.input.length) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        return { type: 'EOF', value: '' };
       }
-    }
 
-    if (/^<(text)>/.test(remainder)) {
-      const match = remainder.match(/^<(\w+)>/);
-      if (match) {
-        this.pos += match[0].length;
-        return { type: 'ContentTagOpen', value: match[1] };
+      const remainder = this.input.slice(this.pos);
+
+      if (/^<(system|user|assistant)>/.test(remainder)) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        const match = remainder.match(/^<(\w+)>/);
+        if (match) {
+          this.pos += match[0].length;
+          return { type: 'RoleTagOpen', value: match[1] };
+        }
       }
-    }
 
-    if (/^<\/(system|user|assistant)>/.test(remainder)) {
-      const match = remainder.match(/^<\/(\w+)>/);
-      if (match) {
-        this.pos += match[0].length;
-        return { type: 'RoleTagClose', value: match[1] };
+      if (/^<(text)>/.test(remainder)) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        const match = remainder.match(/^<(\w+)>/);
+        if (match) {
+          this.pos += match[0].length;
+          return { type: 'ContentTagOpen', value: match[1] };
+        }
       }
-    }
 
-    if (/^<\/(text)>/.test(remainder)) {
-      const match = remainder.match(/^<\/(\w+)>/);
-      if (match) {
-        this.pos += match[0].length;
-        return { type: 'ContentTagClose', value: match[1] };
+      if (/^<\/(system|user|assistant)>/.test(remainder)) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        const match = remainder.match(/^<\/(\w+)>/);
+        if (match) {
+          this.pos += match[0].length;
+          return { type: 'RoleTagClose', value: match[1] };
+        }
       }
-    }
 
-    if (/^<img/.test(remainder)) {
-      const match = remainder.match(/^<img\s+src="([^"]+)"\s*\/>/);
-      if (match) {
-        this.pos += match[0].length;
-        return { type: 'SelfClosingTag', value: match[1] };
+      if (/^<\/(text)>/.test(remainder)) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        const match = remainder.match(/^<\/(\w+)>/);
+        if (match) {
+          this.pos += match[0].length;
+          return { type: 'ContentTagClose', value: match[1] };
+        }
       }
+
+      if (/^<img/.test(remainder)) {
+        if (textBuffer.length > 0 && !textBuffer.every(s => /^\s*$/.test(s))) { return { type: 'Text', value: textBuffer.join('') }; }
+        const match = remainder.match(/^<img\s+src="([^"]+)"\s*\/>/);
+        if (match) {
+          this.pos += match[0].length;
+          return { type: 'SelfClosingTag', value: match[1] };
+        }
+      }
+
+
+      textBuffer.push(this.input[this.pos]);
+      this.pos++;
     }
-
-
-    const textMatch = remainder.match(/^[^<]+/);
-    if (textMatch) {
-      this.pos += textMatch[0].length;
-      return { type: 'Text', value: textMatch[0].trim() }; // Trim text here
-    }
-
-    throw new Error(`Unexpected character at position ${this.pos}`);
   }
 
   private skipWhitespace() {
@@ -91,6 +93,7 @@ class Tokenizer {
       this.pos++;
     }
   }
+
 }
 
 class Parser {
@@ -128,14 +131,14 @@ class Parser {
     while (this.lookahead && this.lookahead.type !== 'EOF' && this.lookahead.type !== 'RoleTagClose' && this.lookahead.type !== 'RoleTagOpen') {
       if (this.lookahead.type === 'ContentTagOpen') {
         this.consume('ContentTagOpen');
-        content.push({ type: 'text', content: this.lookahead.value });
+        content.push({ type: 'text', content: this.lookahead.value.trim() });
         this.consume('Text');
         this.consume('ContentTagClose', this.lookahead.value);
       } else if (this.lookahead.type === 'Text') {
-        content.push({ type: 'text', content: this.lookahead.value });
+        content.push({ type: 'text', content: this.lookahead.value.trim() });
         this.consume('Text');
       } else if (this.lookahead.type === 'SelfClosingTag') {
-        content.push({ type: 'img', content: this.lookahead.value });
+        content.push({ type: 'img', content: this.lookahead.value.trim() });
         this.consume('SelfClosingTag');
       } else {
         throw new Error(`Unexpected token: ${this.lookahead.type}`);
@@ -157,7 +160,6 @@ export function extractMessages(input: string): Message[] {
   const tokenizer_for_log = new Tokenizer(input);
   while (true) {
     const token = tokenizer_for_log.nextToken();
-    console.log(token);
     if (token.type === 'EOF') {
       break;
     }

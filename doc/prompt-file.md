@@ -1,7 +1,9 @@
-# The .prompt File Format
-The .prompt file format is designed to help users define structured prompts for interacting with large language models (LLMs). It's inspired from [Continue's](https://docs.continue.dev/features/prompt-files) and [HumanLoops'](https://docs.humanloop.com/docs/prompt-file-format) prompt file. 
+# The Prompt File Format
+The Prompt file format is designed to help users define structured prompts for interacting with large language models (LLMs). It's inspired from [Continue's](https://docs.continue.dev/features/prompt-files) and [HumanLoops](https://docs.humanloop.com/docs/prompt-file-format) prompt file. 
 
 The prompt file supports a variety of tools such as **input variable, web browsing, image, promtp chaining, code execution, control loop, etc.** to help users develop and evaluate prompts more efficiently. In fact, it has the potential to be a fully featured agent framework.
+
+The prompt files end with a `.prompt` extension.
 
 ## File Structure
 The format consists of two main sections: a YAML configuration section and a [Handlebars](https://handlebarsjs.com/) template section. Below is a detailed explanation of the format with examples.
@@ -78,8 +80,6 @@ You are a software expert. You help me write some test code for the `prompt-runn
 or the raw content
 
 {{browse "https://github.com/js8544/vscode-prompt-runner/" "raw"}}
-
-
 ```
 
 ### Role messages
@@ -90,6 +90,7 @@ provider: openai
 model: gpt-4o
 temperature: 0.5
 max_tokens: 4096
+description: A prompt with multiple roles
 ---
 <system>
   System-level instructions.

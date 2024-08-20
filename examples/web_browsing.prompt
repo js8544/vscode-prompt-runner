@@ -1,0 +1,13 @@
+---
+provider: openai
+model: gpt-4o
+temperature: 0.5
+max_tokens: 4096
+---
+You are a software expert. You help me write some test code for the `prompt-runner` vscode plugin. Please refer to the github repo below.
+
+{{browse "https://github.com/js8544/vscode-prompt-runner/"}}
+
+or the raw content
+
+{{browse "https://github.com/js8544/vscode-prompt-runner/" "raw"}}

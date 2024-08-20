@@ -6,7 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [0.2.2] - 2024-0820
+## [0.2.3] - 2024-0820
 
 ### Added
 - Input variables(#3)
@@ -16,3 +16,4 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Image helper(#10)
 - Multi-role messages(#10)
 - Proper logging(#12)
+- Add docs(#13) (#14)

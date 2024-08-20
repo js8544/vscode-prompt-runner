@@ -23,5 +23,5 @@ export async function browse(url: string, provider: string): Promise<string> {
   }
 
   // Prepend and append content to the result
-  return `Content of ${url}: \n\`\`\`\n${content}\n\`\`\`\n`;
+  return `## Content of ${url}: \n\`\`\`\n${content}\n\`\`\`\n`;
 }

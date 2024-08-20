@@ -16,5 +16,5 @@ export async function search(keyword: string, provider: string): Promise<string>
   }
 
   // Prepend and append content to the result
-  return `Search result of ${keyword}: \n\`\`\`\n${content}\n\`\`\`\n`;
+  return `## Search result of ${keyword}: \n\`\`\`\n${content}\n\`\`\`\n`;
 }

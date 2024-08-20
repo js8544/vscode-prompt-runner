@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
+import logger from '../../../utils/logger';
 
 /*
   * Include a file in the prompt file.
@@ -12,6 +13,7 @@ import * as os from 'os';
 export function include(filePath: string) {
   // replace ./ with the directory of the current file.
 
+  logger.info("Including file " + filePath);
   var baseDir = process.cwd();
   const activeEditor = vscode.window.activeTextEditor;
   if (activeEditor) {

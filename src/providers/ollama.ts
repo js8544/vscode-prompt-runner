@@ -2,6 +2,8 @@ import { OpenAI } from 'openai';
 import { Message, Provider } from '../utils/types';
 import { PromptConfig } from '../utils/types';
 import { ChatCompletionMessageParam } from 'openai/resources/index.mjs';
+import { formatMessagesForLog } from '../utils/formatMessages';
+import logger from '../utils/logger';
 
 // We use the OpenAI compatible api from Ollama
 export async function* executePromptOllama(provider: Provider, model: string, messages: Message[], config: PromptConfig): AsyncIterable<string> {
@@ -17,6 +19,9 @@ export async function* executePromptOllama(provider: Provider, model: string, me
   if (messages[0].role !== 'system') {
     messages = [{ role: 'system', content: 'You are a helpful assistant.' }, ...messages];
   }
+
+  logger.info(`Compiled messages: \n${formatMessagesForLog(messages)}`);
+
 
   const stream = await client.chat.completions.create({
     model: model,

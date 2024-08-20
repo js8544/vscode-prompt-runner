@@ -14,6 +14,23 @@ suite('PromptFile Tests', () => {
       if (options?.prompt?.includes('sentence')) { return 'test sentence'; }
       return undefined;
     });
+
+    // Stub the VSCode getConfiguration function
+    sinon.stub(vscode.workspace, 'getConfiguration').returns(
+      {
+        get: (key: string) => {
+          if (key === 'providers') {
+            return [
+              {
+                name: 'openai',
+                type: 'openai',
+                models: ['gpt-4o'],
+              }
+            ];
+          }
+        }
+      } as vscode.WorkspaceConfiguration
+    );
   });
 
   afterEach(() => {
@@ -46,6 +63,51 @@ Context: {{context}}
 
     // Check the compiled prompt
     assert.strictEqual(result.compiledPrompt, 'Autocomplete the sentence.\n\nContext: test context\n\ntest sentence');
+  });
+
+  test('should reject an unsupported provider or model', async () => {
+    const content1 = `
+---
+model: gpt-4o
+temperature: 0.7
+max_tokens: 256
+provider: closeai
+---
+Autocomplete the sentence.
+
+Context: {{context}}
+
+{{sentence}}
+    `;
+
+    const content2 = `
+    ---
+    model: gpt-5
+    temperature: 0.7
+    max_tokens: 256
+    provider: openai
+    ---
+    Autocomplete the sentence.
+    
+    Context: {{context}}
+    
+    {{sentence}}
+        `;
+
+
+    assert.rejects(
+      async () => {
+        await compilePrompt(content1);
+      },
+      new Error('Provider closeai not found.')
+    );
+
+    assert.rejects(
+      async () => {
+        await compilePrompt(content2);
+      },
+      new Error('Model gpt-5 not supported by provider openai.')
+    );
   });
 
   test('should handle templates without YAML', async () => {

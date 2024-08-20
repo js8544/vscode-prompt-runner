@@ -12,7 +12,6 @@ export const defaultProviders: Provider[] = [
       "gpt-4o",
       "gpt-4o-mini"
     ],
-    default_model: "gpt-4o",
     organization_id: "",
     project_id: ""
   },

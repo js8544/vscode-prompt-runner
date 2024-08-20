@@ -9,9 +9,14 @@ export interface Provider {
   default_model?: string;
 }
 
+export interface Content {
+  type: "text" | "image_url";
+  text?: string;
+  url?: string;
+}
 export interface Message {
-  role: string;
-  content: string;
+  role: "system" | "user" | "assistant";
+  content: string | Content[];
 }
 
 export interface PromptConfig {

@@ -43,14 +43,16 @@ function getHandlebarsVariables(input: string): string[] {
 
 function verifyConfig(promptConfig: PromptConfig): void {
   const config = vscode.workspace.getConfiguration('prompt-runner');
-  // check that provider and model is supported
-  const providers = config.get('providers') as Provider[];
-  const provider = providers.find(p => p.name === promptConfig.provider);
-  if (!provider) {
-    throw new Error(`Provider ${promptConfig.provider} not found.`);
-  }
-  if (promptConfig.model && !provider.models.includes(promptConfig.model)) {
-    throw new Error(`Model ${promptConfig.model} not supported by provider ${provider.name}.`);
+  if (promptConfig.model || promptConfig.provider) {
+    // check that provider and model is supported
+    const providers = config.get('providers') as Provider[];
+    const provider = providers.find(p => p.name === promptConfig.provider);
+    if (!provider) {
+      throw new Error(`Provider ${promptConfig.provider} not found.`);
+    }
+    if (promptConfig.model && !provider.models.includes(promptConfig.model)) {
+      throw new Error(`Model ${promptConfig.model} not supported by provider ${provider.name}.`);
+    }
   }
 }
 

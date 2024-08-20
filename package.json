@@ -99,7 +99,7 @@
           "description": "List of providers with their configuration",
           "default": [
             {
-              "name": "OpenAI",
+              "name": "openai",
               "type": "openai",
               "base_url": "https://api.openai.com/v1",
               "api_key": "",
@@ -111,7 +111,7 @@
               ]
             },
             {
-              "name": "Anthropic",
+              "name": "anthropic",
               "type": "anthropic",
               "base_url": "https://api.anthropic.com",
               "api_key": "",
@@ -123,7 +123,7 @@
               ]
             },
             {
-              "name": "VSCode Copilot",
+              "name": "copilot",
               "type": "copilot",
               "models": [
                 "gpt-3.5-turbo",
@@ -132,7 +132,7 @@
               ]
             },
             {
-              "name": "Ollama",
+              "name": "ollama",
               "type": "ollama",
               "base_url": "http://127.0.0.1:11434/v1",
               "api_key": "sk-ollama",

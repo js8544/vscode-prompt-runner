@@ -1,9 +1,10 @@
 import Handlebars from "handlebars";
 import * as vscode from 'vscode';
 import * as yaml from 'yaml';
-import { PromptConfig, Provider } from '../utils/types';
+import { Message, PromptConfig, Provider } from '../utils/types';
 import { helpers } from './helpers/helper';
 import asyncHelpers from "handlebars-async-helpers-ts";
+import { extractMessages } from "./extractMessages";
 
 
 const hb: typeof Handlebars = asyncHelpers(Handlebars);
@@ -56,7 +57,7 @@ function verifyConfig(promptConfig: PromptConfig): void {
   }
 }
 
-export async function compilePrompt(content: string, document?: vscode.TextDocument): Promise<{ promptConfig: PromptConfig, compiledPrompt: string }> {
+export async function compilePrompt(content: string, document?: vscode.TextDocument): Promise<{ promptConfig: PromptConfig, messages: Message[], inputValues: any }> {
   // Step 1: Split the content by "---" and parse the YAML config if present
   // ignore the starting "---\n"
   content = content.trim();
@@ -95,7 +96,10 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
   const template = hb.compile(templateContent, { noEscape: true });
   const compiledPrompt = await template(inputValues);
 
-  // console.log("compiledPrompt: ", compiledPrompt);
-  // console.log("promptConfig: ", promptConfig);
-  return { promptConfig, compiledPrompt };
+  console.log("compiledPrompt: ", compiledPrompt);
+
+  // Step 4: Extract messages from the compiled prompt
+  const messages = extractMessages(compiledPrompt);
+
+  return { promptConfig, messages, inputValues };
 }

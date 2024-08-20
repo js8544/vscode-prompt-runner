@@ -9,9 +9,9 @@ import { compileFile } from './compileFile';
 
 export async function executeFileWithProviderAndModel(providers: Provider[], providerName: string, model: string) {
 
-  const { promptConfig, compiledPrompt } = await compileFile();
+  const { promptConfig, messages, inputValues } = await compileFile();
 
-  if (!compiledPrompt) {
+  if (!messages || messages.length === 0) {
     vscode.window.showErrorMessage("Failed to compile prompt.");
     return;
   }
@@ -38,10 +38,10 @@ export async function executeFileWithProviderAndModel(providers: Provider[], pro
     var stream;
     switch (provider.type) {
       case 'openai':
-        stream = await executePromptOpenAI(provider, model, compiledPrompt, promptConfig);
+        stream = await executePromptOpenAI(provider, model, messages, promptConfig);
         break;
       case 'ollama':
-        stream = await executePromptOllama(provider, model, compiledPrompt, promptConfig);
+        stream = await executePromptOllama(provider, model, messages, promptConfig);
         break;
       // case 'anthropic':
       //   stream = await executePromptAnthropic(provider, model, prompt);

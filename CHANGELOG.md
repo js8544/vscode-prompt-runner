@@ -6,4 +6,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-- Initial release
+## [0.2.2] - 2024-0820
+
+### Added
+- Input variables(#3)
+- Include helper(#4)
+- Browse helper(#6)
+- Search helper(#8)
+- Image helper(#10)
+- Multi-role messages(#10)
+- Proper logging(#12)

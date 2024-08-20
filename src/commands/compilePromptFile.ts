@@ -14,6 +14,8 @@ export function compilePromptFile() {
 
     const document = editor.document;
 
+    logger.info(`Running ${document.fileName}`);
+
     const prompt = document.getText();
 
     const { promptConfig, messages, inputValues } = await compilePrompt(prompt, document);

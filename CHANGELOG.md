@@ -6,6 +6,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.3.5] - 2024-08-21
+- Prompt chaining with eval(#15)
+
 ## [0.3.4] - 2024-08-21
 
 ### Added

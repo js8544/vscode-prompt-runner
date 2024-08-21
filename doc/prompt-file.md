@@ -132,7 +132,7 @@ What are these images?
 
 ```
 
-### Search (Experimental)
+### Search
 We again leverage [JINA's reader api](https://jina.ai/reader/) for searching. Use the `search` helper to get the search result. Here's is an AI search engine implement in one prompt file.
 ```yaml
 ---
@@ -165,8 +165,8 @@ If you think there's nothing relevant in the search results, you can say that 'H
 Anything between the \`context\` is retrieved from a search engine and is not a part of the conversation with the user. Today's date is ${new Date().toISOString()}
 ```
 
-### Prompt Chaining and Multi-shot Reasoning (TODO)
-You can include the result of running a prompt in another prompt using the `eval` helper. This can be used to implement prompt chaining and multi-shot reasoning.
+### Prompt Chaining and Multi-shot Reasoning
+This is where the magic of AI agents come in. You can include the result of running a prompt in another prompt using the `eval` helper. This can be used to implement prompt chaining and multi-shot reasoning.
 ```yaml
 ---
 provider: openai
@@ -182,8 +182,10 @@ max_tokens: 4096
   {{question1}}
 </user>
 
+
+{{! Assuming `answer_with_gpt4o.prompt` take a single input var "question"}}
 <assistant>
-  {{eval "answer_with_gpt4o.prompt" {{question1}} }}
+  {{eval "answer_with_gpt4o.prompt" question=question1 }}
 </assistant>
 
 <user>
@@ -191,7 +193,7 @@ max_tokens: 4096
 </user>
 
 <assistant>
-  {{eval "answer_with_gpt4o.prompt" {{question2}} }}
+  {{eval "answer_with_gpt4o.prompt" question=question2 }}
 </assistant>
 
 <user>

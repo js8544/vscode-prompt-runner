@@ -1,0 +1,7 @@
+---
+model: gpt-4o
+provider: openai
+---
+Answer the following question:
+
+{{question}}

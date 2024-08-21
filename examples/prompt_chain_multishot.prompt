@@ -12,8 +12,10 @@ max_tokens: 4096
   {{question1}}
 </user>
 
+
+{{! Assuming `answer_with_gpt4o.prompt` take a single input var "question"}}
 <assistant>
-  {{eval "answer_with_gpt4o.prompt" {{question1}} }}
+  {{eval "answer_with_gpt4o.prompt" question=question1 }}
 </assistant>
 
 <user>
@@ -21,7 +23,7 @@ max_tokens: 4096
 </user>
 
 <assistant>
-  {{eval "answer_with_gpt4o.prompt" {{question2}} }}
+  {{eval "answer_with_gpt4o.prompt" question=question2 }}
 </assistant>
 
 <user>

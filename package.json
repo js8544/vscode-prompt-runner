@@ -2,7 +2,7 @@
   "name": "prompt-runner",
   "displayName": "Prompt Runner",
   "description": "Run LLM prompts directly in VSCode. It turns VSCode into a powerful prompt IDE.",
-  "version": "0.3.3",
+  "version": "0.3.4",
   "publisher": "JinShang",
   "engines": {
     "vscode": "^1.92.0"

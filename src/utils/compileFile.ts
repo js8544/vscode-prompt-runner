@@ -14,7 +14,7 @@ export async function compileFile(): Promise<{ promptConfig: PromptConfig, messa
 
   const prompt = document.getText();
 
-  const { promptConfig, messages, inputValues } = await compilePrompt(prompt, document);
+  const { promptConfig, messages, inputValues } = await compilePrompt(prompt, {});
 
   if (!messages || messages.length === 0) {
     vscode.window.showErrorMessage("Failed to compile prompt.");

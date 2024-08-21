@@ -54,7 +54,7 @@ Context: {{context}}
 {{sentence}}
     `;
 
-    const result = await compilePrompt(content);
+    const result = await compilePrompt(content, {});
 
     // Check the config
     assert.strictEqual(result.promptConfig.model, 'gpt-4o');
@@ -98,14 +98,14 @@ Context: {{context}}
 
     assert.rejects(
       async () => {
-        await compilePrompt(content1);
+        await compilePrompt(content1, {});
       },
       new Error('Provider closeai not found.')
     );
 
     assert.rejects(
       async () => {
-        await compilePrompt(content2);
+        await compilePrompt(content2, {});
       },
       new Error('Model gpt-5 not supported by provider openai.')
     );
@@ -120,7 +120,7 @@ Context: {{context}}
 {{sentence}}
     `;
 
-    const result = await compilePrompt(content);
+    const result = await compilePrompt(content, {});
 
     // The config should be empty since there's no YAML
     assert.deepStrictEqual(result.promptConfig, {});
@@ -143,7 +143,7 @@ Context: {{context}}
 
     await assert.rejects(
       async () => {
-        await compilePrompt(content);
+        await compilePrompt(content, {});
       },
       new Error('No input provided for variable: context')
     );
@@ -156,7 +156,7 @@ Context: {{include "test-data/context.txt"}}
 {{sentence}}
     `;
 
-    const result = await compilePrompt(content);
+    const result = await compilePrompt(content, {});
 
     // Check the compiled prompt
     assert.strictEqual(result.messages[0].content, 'Context: You are a software engineering expert. You are extremely good at software engineering principles and practices. Now you will write unit tests for this project.\n\n\ntest sentence');
@@ -166,7 +166,7 @@ Context: {{include "test-data/context.txt"}}
     async () => {
       const content = `\`\`\`\n\/\\`;
 
-      const result = await compilePrompt(content);
+      const result = await compilePrompt(content, {});
 
       assert.strictEqual(result.messages[0].content, '\`\`\`\n\/\\');
     }
@@ -177,7 +177,7 @@ Context: {{include "test-data/context.txt"}}
     {{image "test-data/1x1.png"}}
     `;
 
-    const result = await compilePrompt(content);
+    const result = await compilePrompt(content, {});
 
     assert.equal((result.messages[0].content[0] as Content).image_url?.url, 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABAQMAAAAl21bKAAAAA1BMVEUAAACnej3aAAAAAXRSTlMAQObYZgAAAApJREFUCNdjYAAAAAIAAeIhvDMAAAAASUVORK5CYII='
     );
@@ -194,7 +194,7 @@ You are a helpful assistant
 </user>
     `;
 
-    const result = await compilePrompt(content);
+    const result = await compilePrompt(content, {});
 
     assert.equal(result.messages[1].content, '<h1>Test</h1>\n<p>Test</p>');
   });

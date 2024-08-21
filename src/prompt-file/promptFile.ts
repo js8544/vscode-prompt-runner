@@ -58,7 +58,8 @@ function verifyConfig(promptConfig: PromptConfig): void {
   }
 }
 
-export async function compilePrompt(content: string, document?: vscode.TextDocument): Promise<{ promptConfig: PromptConfig, messages: Message[], inputValues: any }> {
+export async function compilePrompt(content: string, inputValues: { [key: string]: string }): Promise<{ promptConfig: PromptConfig, messages: Message[], inputValues: { [key: string]: string } }> {
+
   // Step 1: Split the content by "---" and parse the YAML config if present
   // ignore the starting "---\n"
   content = content.trim();
@@ -84,9 +85,10 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
 
   // Step 2: Extract variables needed and show input boxes for user input
   const variables = getHandlebarsVariables(templateContent);
-  const inputValues: { [key: string]: string } = {};
-  logger.info(`Input values: ${JSON.stringify(inputValues)}`);
   for (const variable of variables) {
+    if (inputValues[variable]) {
+      continue;
+    }
     const userInput = await vscode.window.showInputBox({ prompt: `Enter value for ${variable}` });
     if (userInput !== undefined) {
       inputValues[variable] = userInput;
@@ -94,6 +96,8 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
       throw new Error(`No input provided for variable: ${variable}`);
     }
   }
+
+  logger.info(`Input values: ${JSON.stringify(inputValues)}`);
 
   // Step 3: Compile the template using Handlebars
   const template = hb.compile(templateContent, { noEscape: true });
@@ -103,6 +107,7 @@ export async function compilePrompt(content: string, document?: vscode.TextDocum
 
   // Step 4: Extract messages from the compiled prompt
   const messages = extractMessages(compiledPrompt);
+
 
   return { promptConfig, messages, inputValues };
 }

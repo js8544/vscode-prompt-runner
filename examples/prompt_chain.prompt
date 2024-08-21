@@ -1,0 +1,29 @@
+---
+provider: openai
+model: gpt-4o-mini
+temperature: 0.5
+max_tokens: 4096
+---
+<system>
+  You are an AI assistant.
+</system>
+
+<user>
+  {{question1}}
+</user>
+
+<assistant>
+  {{eval "answer_with_gpt4o.prompt" {{question1}} }}
+</assistant>
+
+<user>
+  {{question2}}
+</user>
+
+<assistant>
+  {{eval "answer_with_gpt4o.prompt" {{question2}} }}
+</assistant>
+
+<user>
+  {{question}}
+</user>

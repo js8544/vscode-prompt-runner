@@ -2,7 +2,7 @@
   "name": "prompt-runner",
   "displayName": "Prompt Runner",
   "description": "Run LLM prompts directly in VSCode. It turns VSCode into a powerful prompt IDE.",
-  "version": "0.2.2",
+  "version": "0.3.3",
   "publisher": "JinShang",
   "engines": {
     "vscode": "^1.92.0"
@@ -174,7 +174,9 @@
     "pretest": "pnpm run compile-tests && pnpm run compile && pnpm run lint",
     "check-types": "tsc --noEmit",
     "lint": "eslint src --ext ts",
-    "test": "vscode-test"
+    "test": "vscode-test",
+    "vscode:package": "pnpm vsce package --no-dependencies",
+    "vscode:publish": "pnpm vsce publish --no-dependencies"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.7",

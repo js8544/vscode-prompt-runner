@@ -1,0 +1,20 @@
+---
+provider: openai
+model: gpt-4o
+temperature: 0.5
+max_tokens: 4096
+description: A prompt with multiple roles
+---
+<system>
+  System-level instructions.
+</system>
+
+<user>
+  This is a user message
+</user>
+
+<assistant>
+  This is a user message
+</assistant>
+
+Messages without surrounding role tags are also user messages.

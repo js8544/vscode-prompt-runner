@@ -1,9 +1,9 @@
 # The Prompt File Format
-The Prompt file format is designed to help users define structured prompts for interacting with large language models (LLMs). It's inspired from [Continue's](https://docs.continue.dev/features/prompt-files) and [HumanLoops](https://docs.humanloop.com/docs/prompt-file-format) prompt file. 
+The Prompt file format is designed to help users define structured prompts for interacting with large language models (LLMs). It's inspired from [Continue's](https://docs.continue.dev/features/prompt-files) and [HumanLoops](https://docs.humanloop.com/docs/prompt-file-format) prompt file.  
 
-The prompt file supports a variety of tools such as **input variable, web browsing, image, prompt chaining, code execution, control loop, etc.** to help users develop and evaluate prompts more efficiently. In fact, it has the potential to be a fully featured agent framework.
+The prompt file supports a variety of tools such as **input variable, web browsing, image, prompt chaining, code execution, control loop, etc.** to help users develop and evaluate prompts more efficiently. In fact, you can create a complete AI Agent workflow with prompt files alone.
 
-The prompt files end with a `.prompt` extension.
+The prompt files end with a `.prompt` extension. Checkout the `/examples` folder for the different workflows it supports.
 
 ## File Structure
 The format consists of two main sections: a YAML configuration section and a [Handlebars](https://handlebarsjs.com/) template section. Below is a detailed explanation of the format with examples.
@@ -166,7 +166,7 @@ Anything between the \`context\` is retrieved from a search engine and is not a 
 ```
 
 ### Prompt Chaining and Multi-shot Reasoning
-This is where the magic of AI agents come in. You can include the result of running a prompt in another prompt using the `eval` helper. This can be used to implement prompt chaining and multi-shot reasoning.
+This is where the magic of AI agent workflows comes in. You can include the result of running a prompt in another prompt using the `eval` helper. This can be used to implement prompt chaining and multi-shot reasoning.
 ```yaml
 ---
 provider: openai

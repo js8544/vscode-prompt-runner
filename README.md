@@ -5,9 +5,9 @@
 
 Prompt Runner is a Visual Studio Code extension that allows users to run [prompt files](doc/prompt-file.md) against various LLMs directly from the editor. It turns VSCode into a powerful prompt IDE. You no longer have to tolerate the tiny chat interface or copy pasting between apps for complex prompts.
 
-[The prompt file format](doc/prompt-file.md) is designed to help users define structured prompts for interacting with large language models (LLMs). It supports a variety of tools such as **input variable, web browsing, image, promtp chaining, code execution, control loop, etc.** to help users develop and evaluate prompts more efficiently. In fact, it has the potential to be a fully featured agent framework.
+[The prompt file format](doc/prompt-file.md) is designed to help users define structured prompts for interacting with large language models (LLMs). It supports a variety of tools such as **input variable, web browsing, image, promtp chaining, code execution, control loop, etc.** to help users develop and evaluate prompts more efficiently. In fact, you can create a complete AI Agent workflow with prompt files alone.
 
-Check out the [this doc](doc/prompt-file.md) for a detailed documentation of what this extension supports. 
+Check out the [this doc](doc/prompt-file.md) for a detailed documentation of what this extension supports. Checkout the `/examples` folder for many example workflows 
 
 ![demo](images/demo.gif)
 

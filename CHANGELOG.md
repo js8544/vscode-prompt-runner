@@ -6,7 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [0.2.3] - 2024-0820
+## [0.3.4] - 2024-08-21
 
 ### Added
 - Input variables(#3)

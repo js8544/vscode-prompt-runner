@@ -160,6 +160,15 @@
           "default": "webview panel"
         }
       }
+    },
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "prompt-runner-sidebar",
+          "name": "Prompt Runner"
+        }
+      ]
     }
   },
   "scripts": {

@@ -1,6 +1,7 @@
 
 import { executePromptOllama } from "../../../providers/ollama";
 import { executePromptOpenAI } from "../../../providers/openai";
+import { executePromptAnthropic } from "../../../providers/anthropic";
 import logger from "../../../utils/logger";
 import { Provider } from "../../../utils/types";
 import { compilePrompt } from "../../promptFile";
@@ -49,9 +50,9 @@ export async function evaluate(fileName: string, options: any): Promise<String> 
     case 'ollama':
       stream = await executePromptOllama(provider, model, messages, promptConfig);
       break;
-    // case 'anthropic':
-    //   stream = await executePromptAnthropic(provider, model, prompt);
-    //   break;
+    case 'anthropic':
+      stream = await executePromptAnthropic(provider, model, messages, promptConfig);
+      break;
     // case 'copilot':
     //   stream = await executePromptCopilot(provider, model, prompt);
     default:

@@ -160,6 +160,15 @@
           "default": "webview panel"
         }
       }
+    },
+    "views": {
+      "explorer": [
+        {
+          "type": "webview",
+          "id": "prompt-runner-sidebar",
+          "name": "Prompt Runner"
+        }
+      ]
     }
   },
   "scripts": {
@@ -197,7 +206,7 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.26.1",
+    "@anthropic-ai/sdk": "^0.29.0",
     "axios": "^1.7.4",
     "handlebars": "^4.7.8",
     "handlebars-async-helpers-ts": "^2.0.1",

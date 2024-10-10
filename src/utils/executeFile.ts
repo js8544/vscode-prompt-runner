@@ -2,7 +2,7 @@ import * as vscode from 'vscode';
 import { Provider } from './types';
 import { executePromptOpenAI } from '../providers/openai';
 import { executePromptOllama } from '../providers/ollama';
-// import { executePromptAnthropic } from '../providers/anthropic';
+import { executePromptAnthropic } from '../providers/anthropic';
 // import { executePromptCopilot } from '../providers/copilot';
 import { displayInOutputChannel, displayInWebviewPanel } from './outputHandlers';
 import { compileFile } from './compileFile';
@@ -43,9 +43,9 @@ export async function executeFileWithProviderAndModel(providers: Provider[], pro
       case 'ollama':
         stream = await executePromptOllama(provider, model, messages, promptConfig);
         break;
-      // case 'anthropic':
-      //   stream = await executePromptAnthropic(provider, model, prompt);
-      //   break;
+      case 'anthropic':
+        stream = await executePromptAnthropic(provider, model, messages, promptConfig);
+        break;
       // case 'copilot':
       //   stream = await executePromptCopilot(provider, model, prompt);
       default:

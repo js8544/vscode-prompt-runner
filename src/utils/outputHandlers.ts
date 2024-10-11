@@ -1,7 +1,8 @@
 import { marked } from 'marked';
 import * as vscode from 'vscode';
+import type { CompletionTokenUsage } from 'ai';
 
-export function displayInOutputChannel(stream: AsyncIterable<string>) {
+export function displayInOutputChannel(stream: AsyncIterable<string>, usage?: Promise<CompletionTokenUsage>) {
   const outputChannel = vscode.window.createOutputChannel("Prompt Runner Output");
   outputChannel.show();
 
@@ -10,11 +11,16 @@ export function displayInOutputChannel(stream: AsyncIterable<string>) {
       const output = chunk || '';
       outputChannel.append(output);
     }
+    if (usage) {
+      const { promptTokens, completionTokens, totalTokens } = await usage;
+      if (!promptTokens && !completionTokens && !totalTokens) { return; }
+      outputChannel.appendLine(`\n\nPrompt Tokens: ${promptTokens || 0}\nCompletion Tokens: ${completionTokens || 0}\nTotal Tokens: ${totalTokens || 0}`);
+    }
     outputChannel.appendLine("\n\n[Stream Complete]");
   })();
 }
 
-export function displayInWebviewPanel(stream: AsyncIterable<string>) {
+export function displayInWebviewPanel(stream: AsyncIterable<string>, usage?: Promise<CompletionTokenUsage>) {
   const panel = vscode.window.createWebviewPanel(
     'promptCompilerOutput',
     'Prompt Compiler Output',
@@ -28,6 +34,12 @@ export function displayInWebviewPanel(stream: AsyncIterable<string>) {
     for await (const chunk of stream) {
       const chunkContent = chunk || '';
       output += chunkContent;
+      panel.webview.html = getWebviewContent(output);
+    }
+    if (usage) {
+      const { promptTokens, completionTokens, totalTokens } = await usage;
+      if (!promptTokens && !completionTokens && !totalTokens) { return; }
+      output += `<br><br><hr><br>Prompt Tokens: ${promptTokens || 0}<br>Completion Tokens: ${completionTokens || 0}<br>Total Tokens: ${totalTokens || 0}`;
       panel.webview.html = getWebviewContent(output);
     }
   })();

@@ -20,10 +20,19 @@ Install on [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemN
 
 - **Run Prompt Files**: Run the content of the active editor as a prompt against the selected LLM provider and model. 
 - **Extensive Tools**: [The prompt file format](doc/prompt-file.md) supports tools such as **input variable, web browsing, image, promtp chaining, code execution, control loop, etc.**. In fact you can build agents entirely with prompt files.
-- **Multiple Providers** (Ongoing): Support for various providers including OpenAI, Ollama. I am working on Anthropic and VSCode Copilot as model providers.
+- **Multiple Providers**: Support for various providers including OpenAI, Anthropic, Gemini, Mistral, Groq and Ollama. More to be added in the future (Amazon Bedrock, Google Vertex AI, Cohere, Perplexity, Fireworks, Chrome AI, AnthropicVertex, FriendliAI, Portkey, Cloudflare Workers AI, LLamaCpp).
 - **Observability** (TODO): Integrate with prompt management platforms such as Langfuse for observability, feedback and prompt management.
 
 ## Usage
+
+### Sidebar
+Use the "Prompt Runner" sidebar to trigger the commands:
+- **Run Prompt**: Run the current document as a prompt using the default provider and model.
+- **Run Prompt with Model**: Run the current document as a prompt after selecting a provider and model.
+- **Preview Prompt**: Compile the current prompt file.
+- **Select Default Model**: Set the default provider and model to use for future prompts.
+- **Select Output Location**: Set the output location of the compiled prompts or running outputs. Choose `webview panel` for better readability, or `output channel` for easier copy.
+- **Provider Settings**: Open the settings panel for the extension. Click "settings.json" to update the API Keys.
 
 ### Commands
 Press `Ctrl+Shift+P` or `F1` to open the command palette, and type the following commands:
@@ -49,14 +58,18 @@ The extension allows users to configure providers and models in the VSCode setti
 #### Default Providers
 
 The default providers include:
-- **OpenAI**: Supports models like `gpt-3.5-turbo`, `gpt-4`, etc.
+- **OpenAI**: `gpt-3.5-turbo`, `gpt-4`, `gpt-4o`, `gpt-4o-mini`, `gpt-4-turbo`
+- **Anthropic**: `claude-3-5-sonnet-20240620`, `claude-3-opus-20240229`, `claude-3-sonnet-20240229`, `claude-3-haiku-20240307`
+- **Gemini**: `gemini-1.5-flash`, `gemini-1.5-flash-8b`, `gemini-1.5-pro`
+- **Mistral**: `mistral-large-latest`, `mistral-small-latest`, `pixtral-12b-2409`, `open-mistral-nemo`
+- **Groq**: `gemma2-9b-it`, `gemma-7b-it`, `llama-3.1-70b-versatile`, `llama-3.1-8b-instant`, `llama-3.2-11b-vision-preview`, `mixtral-8x7b-32768`
 - **Ollama**: A locally hosted LLM with support for custom models.
-- **Anthropic** (TODO): Includes models such as `claude-3.5-sonnet`, `claude-3-opus`, etc.
-- **VSCode Copilot** (TODO): Supports several versions of the GPT models provided by VSCode.
+
+More models can be configured via settings.json
 
 #### Provider Configuration Schema
 
-The configuration for providers can be defined in the VSCode settings file. Currently supported provider types are `openai` and `ollama`. `anthropic` is coming next. Example config:
+The configuration for providers can be defined in the VSCode settings file. Currently supported provider types are `openai`, `anthropic`, `gemini`, `mistral`, `groq`, and `ollama`. Example config:
 
 ```json
 {
@@ -78,6 +91,8 @@ The configuration for providers can be defined in the VSCode settings file. Curr
     ]
 }
 ```
+
+Important note: Anthropic `base_url` needs to end with `v1`: `https://api.anthropic.com/v1`. Ollama `base_url` needs to end with `api` instead of `v1`: `http://127.0.0.1:11434/api`
 
 ### Manual Compilation
 

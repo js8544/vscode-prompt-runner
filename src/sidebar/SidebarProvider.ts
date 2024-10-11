@@ -32,6 +32,9 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 				case 'compilePromptFile':
 					vscode.commands.executeCommand('prompt-runner.compilePromptFile');
 					break;
+				case 'openProviderSettings':
+					vscode.commands.executeCommand('workbench.action.openSettings', 'prompt-runner.providers');
+					break;
 			}
 		});
 	}
@@ -89,6 +92,7 @@ export class SidebarProvider implements vscode.WebviewViewProvider {
 
         <button class="button" onclick="sendMessage('selectDefaultModel')">Select Default Model</button>
 				<button class="button" onclick="sendMessage('selectOutputLocation')">Select Output Location</button>
+				<button class="button" onclick="sendMessage('openProviderSettings')">Provider Settings</button>
 				
 				<script>
 					const vscode = acquireVsCodeApi();

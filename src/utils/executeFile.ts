@@ -1,11 +1,14 @@
 import * as vscode from 'vscode';
 import { Provider } from './types';
-import { executePromptOpenAI } from '../providers/openai';
-import { executePromptOllama } from '../providers/ollama';
-import { executePromptAnthropic } from '../providers/anthropic';
-// import { executePromptCopilot } from '../providers/copilot';
+import { streamText } from 'ai';
+import { createOpenAI } from '@ai-sdk/openai';
+import { createAnthropic } from '@ai-sdk/anthropic';
+import { createOllama } from 'ollama-ai-provider';
+import { createGoogleGenerativeAI } from '@ai-sdk/google';
+import { createMistral } from '@ai-sdk/mistral';
 import { displayInOutputChannel, displayInWebviewPanel } from './outputHandlers';
 import { compileFile } from './compileFile';
+import type { CoreMessage } from 'ai';
 
 export async function executeFileWithProviderAndModel(providers: Provider[], providerName: string, model: string) {
 
@@ -35,34 +38,71 @@ export async function executeFileWithProviderAndModel(providers: Provider[], pro
   const outputLocation = config.get<string>('outputLocation');
 
   try {
-    var stream;
+    let providerModel;
     switch (provider.type) {
       case 'openai':
-        stream = await executePromptOpenAI(provider, model, messages, promptConfig);
+        providerModel = createOpenAI({
+          apiKey: provider.api_key,
+          baseURL: provider.base_url ?? undefined,
+          organization: provider.organization_id ?? undefined,
+          project: provider.project_id ?? undefined,
+          compatibility: 'strict',
+        })(model);
         break;
       case 'ollama':
-        stream = await executePromptOllama(provider, model, messages, promptConfig);
+        providerModel = createOllama({
+          baseURL: provider.base_url || 'http://127.0.0.1:11434/api',
+        })(model);
         break;
       case 'anthropic':
-        stream = await executePromptAnthropic(provider, model, messages, promptConfig);
+        providerModel = createAnthropic({
+          apiKey: provider.api_key,
+          baseURL: provider.base_url ?? undefined,
+        })(model);
         break;
-      // case 'copilot':
-      //   stream = await executePromptCopilot(provider, model, prompt);
+      case 'gemini': 
+        providerModel = createGoogleGenerativeAI({
+          apiKey: provider.api_key,
+          baseURL: provider.base_url ?? undefined,
+        })(model);
+        break;
+      case 'mistral': 
+        providerModel = createMistral({
+          apiKey: provider.api_key,
+          baseURL: provider.base_url ?? undefined,
+        })(model);
+        break;
+      case 'groq': 
+        providerModel = createOpenAI({
+          apiKey: provider.api_key,
+          baseURL: provider.base_url ?? undefined,
+          compatibility: 'strict',
+        })(model);
+        break;
       default:
         vscode.window.showErrorMessage(`Provider ${providerName} not supported yet.`);
         return;
     }
 
+    const { textStream, usage } = await streamText({
+      model: providerModel!,
+      messages: messages as CoreMessage[],
+      maxTokens: promptConfig.max_tokens,
+      temperature: promptConfig.temperature,
+      topP: promptConfig.top_p,
+    });
+
     switch (outputLocation) {
       case 'webview panel':
-        displayInWebviewPanel(stream);
+        displayInWebviewPanel(textStream, usage);
         break;
       case 'output channel':
       default:
-        displayInOutputChannel(stream);
+        displayInOutputChannel(textStream, usage);
         break;
     }
   } catch (error: any) {
+    console.log(error);
     vscode.window.showErrorMessage(`Failed to execute prompt: ${error.message}`);
   }
 }

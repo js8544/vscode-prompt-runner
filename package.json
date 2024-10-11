@@ -188,8 +188,11 @@
     "vscode:publish": "pnpm vsce publish --no-dependencies"
   },
   "devDependencies": {
+    "@types/json-schema": "^7.0.15",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/react": "^18.3.11",
+    "@types/request": "^2.48.12",
     "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.92.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
@@ -206,14 +209,21 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.51",
+    "@ai-sdk/google": "^0.0.51",
+    "@ai-sdk/mistral": "^0.0.42",
+    "@ai-sdk/openai": "^0.0.66",
     "@anthropic-ai/sdk": "^0.29.0",
+    "ai": "^3.4.9",
     "axios": "^1.7.4",
     "handlebars": "^4.7.8",
     "handlebars-async-helpers-ts": "^2.0.1",
     "marked": "^14.0.0",
+    "ollama-ai-provider": "^0.15.2",
     "openai": "^4.55.9",
     "winston": "^3.14.2",
     "winston-transport": "^4.7.1",
-    "yaml": "^2.5.0"
+    "yaml": "^2.5.0",
+    "zod": "^3.23.8"
   }
 }

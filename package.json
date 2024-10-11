@@ -65,7 +65,9 @@
                 "enum": [
                   "openai",
                   "anthropic",
-                  "copilot",
+                  "gemini",
+                  "mistral",
+                  "groq",
                   "ollama"
                 ],
                 "description": "Provider type"
@@ -107,13 +109,16 @@
                 "gpt-3.5-turbo",
                 "gpt-4",
                 "gpt-4o",
-                "gpt-4o-mini"
-              ]
+                "gpt-4o-mini",
+                "gpt-4-turbo"
+              ],
+              "organization_id": "",
+              "project_id": ""
             },
             {
               "name": "anthropic",
               "type": "anthropic",
-              "base_url": "https://api.anthropic.com",
+              "base_url": "https://api.anthropic.com/v1",
               "api_key": "",
               "models": [
                 "claude-3-5-sonnet-20240620",
@@ -123,18 +128,46 @@
               ]
             },
             {
-              "name": "copilot",
-              "type": "copilot",
+              "name": "gemini",
+              "type": "gemini",
+              "base_url": "https://generativelanguage.googleapis.com/v1beta",
+              "api_key": "",
               "models": [
-                "gpt-3.5-turbo",
-                "gpt-4",
-                "gpt-4o"
+                "gemini-1.5-flash",
+                "gemini-1.5-flash-8b",
+                "gemini-1.5-pro"
+              ]
+            },
+            {
+              "name": "mistral",
+              "type": "mistral",
+              "base_url": "https://api.mistral.ai/v1",
+              "api_key": "",
+              "models": [
+                "mistral-large-latest",
+                "mistral-small-latest",
+                "pixtral-12b-2409",
+                "open-mistral-nemo"
+              ]
+            },
+            {
+              "name": "groq",
+              "type": "groq",
+              "base_url": "https://api.groq.com/openai/v1",
+              "api_key": "",
+              "models": [
+                "gemma2-9b-it",
+                "gemma-7b-it",
+                "llama-3.1-70b-versatile",
+                "llama-3.1-8b-instant",
+                "llama-3.2-11b-vision-preview",
+                "mixtral-8x7b-32768"
               ]
             },
             {
               "name": "ollama",
               "type": "ollama",
-              "base_url": "http://127.0.0.1:11434/v1",
+              "base_url": "http://127.0.0.1:11434/api",
               "api_key": "sk-ollama",
               "models": []
             }
@@ -188,8 +221,11 @@
     "vscode:publish": "pnpm vsce publish --no-dependencies"
   },
   "devDependencies": {
+    "@types/json-schema": "^7.0.15",
     "@types/mocha": "^10.0.7",
     "@types/node": "20.x",
+    "@types/react": "^18.3.11",
+    "@types/request": "^2.48.12",
     "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.92.0",
     "@typescript-eslint/eslint-plugin": "^7.14.1",
@@ -206,14 +242,21 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "@ai-sdk/anthropic": "^0.0.51",
+    "@ai-sdk/google": "^0.0.51",
+    "@ai-sdk/mistral": "^0.0.42",
+    "@ai-sdk/openai": "^0.0.66",
     "@anthropic-ai/sdk": "^0.29.0",
+    "ai": "^3.4.9",
     "axios": "^1.7.4",
     "handlebars": "^4.7.8",
     "handlebars-async-helpers-ts": "^2.0.1",
     "marked": "^14.0.0",
+    "ollama-ai-provider": "^0.15.2",
     "openai": "^4.55.9",
     "winston": "^3.14.2",
     "winston-transport": "^4.7.1",
-    "yaml": "^2.5.0"
+    "yaml": "^2.5.0",
+    "zod": "^3.23.8"
   }
 }

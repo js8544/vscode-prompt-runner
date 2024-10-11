@@ -1,6 +1,6 @@
 export interface Provider {
   name: string;
-  type: "openai" | "anthropic" | "copilot" | "ollama";
+  type: "openai" | "anthropic" | "gemini" | "mistral" | "groq" | "ollama";
   base_url?: string;
   api_key?: string;
   organization_id?: string;
